@@ -1,6 +1,8 @@
 # Member-Invitation-Link
 회원 초대 링크 생성 기능 프로젝트입니다.
 
+프로젝트 다운로드 링크 : https://drive.google.com/file/d/15W0XVIzDMPtexZcjlA78iJz-CF8Cb-ES/view?usp=share_link
+
 #  API 명세
 
 ### 회원 초대 API
