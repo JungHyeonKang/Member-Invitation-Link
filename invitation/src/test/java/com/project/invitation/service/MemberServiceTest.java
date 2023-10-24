@@ -125,14 +125,14 @@ public class MemberServiceTest {
         String inviteCode = dto.getInviteCode();
 
         //when
-        Optional<Member> findMember = memberRepository.findByInvitationInviteCode(inviteCode);
+        Optional<Member> findMember = memberRepository.findMemberWithInviteCode(inviteCode);
 
         /*
          * then
          * 초대코드와 맞는 멤버 정보가 있고 코드가 활성화 상태인지 비교
          */
         assertTrue(findMember.isPresent());
-        assertEquals(findMember.get().getInviteCodeStatus(), InviteCodeStatus.ACTIVATE);
+         assertEquals(findMember.get().getInvitation().getInviteCodeStatus(), InviteCodeStatus.ACTIVATE);
 
     }
     @Test
@@ -153,19 +153,19 @@ public class MemberServiceTest {
         String inviteCode = dto.getInviteCode();
         LocalDateTime currentTime = invitation.getExpireDate().plusMinutes(1);
 
-        Optional<Member> findMember = memberRepository.findByInvitationInviteCode(inviteCode);
+        Optional<Member> findMember = memberRepository.findMemberWithInviteCode(inviteCode);
 
         if (currentTime.isAfter(invitation.getExpireDate())) {
-            findMember.get().expireInviteCode();
-        }
+           findMember.get().getInvitation().expireInviteCodeStatus();
+       }
         /*
          * then
          * 유효한 초대 코드이지만 코드 만료 시간이 지났다면 ExpiredLinkException 에러 발생
          */
         assertTrue(findMember.isPresent());
         assertThrows(ExpiredLinkException.class,()->{
-            memberService.join(findMember.get().getInvitation().getInviteCode());
-        });
+           memberService.join(findMember.get().getInvitation().getInviteCode());
+       });
     }
 
     private InviteRequestDto createInviteRequestDto(String memberId, String memberName, String memberPhone, String memberEmail) {

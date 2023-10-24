@@ -2,6 +2,7 @@ package com.project.invitation.exception;
 
 public class ExpiredLinkException extends RuntimeException {
     public ExpiredLinkException() {
+        super("만료된 링크입니다.");
     }
 
     public ExpiredLinkException(String message) {

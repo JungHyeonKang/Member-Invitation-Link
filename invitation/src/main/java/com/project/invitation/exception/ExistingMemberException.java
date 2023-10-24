@@ -2,6 +2,7 @@ package com.project.invitation.exception;
 
 public class ExistingMemberException extends RuntimeException{
     public ExistingMemberException() {
+        super("이미 가입한 회원입니다.");
     }
 
     public ExistingMemberException(String message) {

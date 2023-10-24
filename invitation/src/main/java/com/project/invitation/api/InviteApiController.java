@@ -6,6 +6,7 @@ import com.project.invitation.dto.InviteResponseDto;
 import com.project.invitation.dto.JoinResponseDto;
 import com.project.invitation.exception.InvalidInviteException;
 import com.project.invitation.exception.InvalidLinkException;
+
 import com.project.invitation.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +42,8 @@ public class InviteApiController {
             throw new InvalidInviteException("올바르지 않은 데이터 양식입니다.",errorList);
         }
 
-        InviteResponseDto inviteResponseDto = memberService.invite(inviteRequestDto);
-        log.info("inviteCode {}", inviteResponseDto.getInviteCode());
+         InviteResponseDto inviteResponseDto = memberService.invite(inviteRequestDto);
+        //log.info("inviteCode {}", inviteResponseDto.getInviteCode());
         return inviteResponseDto;
     }
 

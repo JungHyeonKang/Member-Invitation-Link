@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public class Member {
+public class Member extends TimeBaseEntity {
 
     @Id
     private String memberId;
@@ -26,12 +26,15 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus;
 
-    @Embedded
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "invitation_id")
     private Invitation invitation;
+
 
     //임시 회원 생성메서드
     public static Member createTemporaryMember(String memberId, String name, String phone, String email, Invitation invitation) {
         Member member = new Member();
+        invitation.createInvitation();
         member.setMemberId(memberId);
         member.setName(name);
         member.setPhone(phone);
@@ -40,21 +43,29 @@ public class Member {
         member.setMemberStatus(MemberStatus.TEMPORARY);
         return member;
     }
-    public InviteCodeStatus getInviteCodeStatus() {
-        InviteCodeStatus inviteCodeStatus = invitation.getInviteCodeStatus();
-        return inviteCodeStatus;
+
+    // Invitation 과 연관메서드
+    public void setInvitation(Invitation invitation) {
+        this.invitation = invitation;
+        invitation.setMember(this);
     }
-    public void setInviteCode(String inviteCode) {
-        invitation.setInviteCode(inviteCode);
+    // 초대장 수정 메서드
+    public String updateInviteCode() {
+        return this.invitation.updateInvitation();
     }
-    // 링크 만료 메서드
-    public void expireInviteCode() {
-        invitation.setInviteCodeStatus(InviteCodeStatus.EXPIRED);
+    //회원 활성화 메서드
+    public void activateMember() {
+        this.memberStatus = MemberStatus.ACTIVATE;
     }
-    // 링크 활성화 메서드
-    public void activateInviteCode() {
-        invitation.setInviteCodeStatus(InviteCodeStatus.ACTIVATE);
+    // 임시회원 확인
+    public boolean isMemberTemporary() {
+        return this.memberStatus == MemberStatus.TEMPORARY ? true : false;
     }
+
+
+
+
+
 
 
 }

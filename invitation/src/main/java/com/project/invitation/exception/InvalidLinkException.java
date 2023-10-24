@@ -3,6 +3,7 @@ package com.project.invitation.exception;
 
 public class InvalidLinkException extends RuntimeException {
     public InvalidLinkException() {
+        super("유효하지 않은 링크입니다.");
     }
 
     public InvalidLinkException(String message) {
